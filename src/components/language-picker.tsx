@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +9,10 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 export function LanguagePicker() {
-  const [language, setLanguage] = useState("EN")
+  const [language, setLanguage] = useState("EN");
 
   return (
     <DropdownMenu>
@@ -28,5 +28,5 @@ export function LanguagePicker() {
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
