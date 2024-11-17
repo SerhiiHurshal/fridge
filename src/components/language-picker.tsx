@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,21 +9,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { redirect, useParams } from "next/navigation";
+import { Language } from "@/app/i18n";
+import { languages } from "@/app/i18n/settings";
 
 export function LanguagePicker() {
-  const [language, setLanguage] = useState("EN");
+  const { lng } = useParams<{ lng: Language }>();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{language}</Button>
+        <Button variant="outline">{lng.toUpperCase()}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
-          <DropdownMenuRadioItem value="EN">EN</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="DE">DE</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="UA">UA</DropdownMenuRadioItem>
+        <DropdownMenuRadioGroup value={lng} onValueChange={(newLng) => redirect(`/${newLng}`)}>
+          {languages.map((optionLng) => (
+            <DropdownMenuRadioItem key={optionLng} value={optionLng}>
+              {optionLng.toUpperCase()}
+            </DropdownMenuRadioItem>
+          ))}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
