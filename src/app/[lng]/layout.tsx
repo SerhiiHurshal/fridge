@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { dir } from "i18next";
 import Header from "@/components/header";
@@ -20,6 +20,12 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Fridge",
   description: "Description",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export async function generateStaticParams() {
