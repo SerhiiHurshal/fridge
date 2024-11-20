@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,8 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { redirect, useParams } from "next/navigation";
-import { languages, Language } from "@/app/i18n/settings";
+import { languages, Language } from "@/i18n/settings";
 
 export function LanguagePicker() {
   const { lng } = useParams<{ lng: Language }>();
