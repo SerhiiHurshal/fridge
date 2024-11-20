@@ -1,6 +1,6 @@
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { NetworkOnly, Serwist } from "serwist";
+import { Serwist } from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -11,17 +11,14 @@ declare global {
 declare const self: ServiceWorkerGlobalScope;
 
 const serwist = new Serwist({
-  precacheEntries: self.__SW_MANIFEST,
+  precacheEntries: self.__SW_MANIFEST?.filter(
+    (entry) =>
+      !/splash-screens|web-app-manifest/i.test(typeof entry === "string" ? entry : entry.url),
+  ),
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: [
-    ...defaultCache,
-    {
-      matcher: /images\/splash-screens*/i,
-      handler: new NetworkOnly(),
-    },
-  ],
+  runtimeCaching: defaultCache,
 });
 
 serwist.addEventListeners();
