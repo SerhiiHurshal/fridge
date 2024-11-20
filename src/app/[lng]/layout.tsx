@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "../globals.css";
-import Header from "@/components/header";
 import { dir } from "i18next";
+import Header from "@/components/header";
+import "../globals.css";
 import { languages } from "../i18n/settings";
 import { Language } from "../i18n";
+import PageHead from "./page-head";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -36,13 +37,7 @@ export default async function RootLayout({
   const { lng } = await params;
   return (
     <html lang={lng} dir={dir(lng)}>
-      <head>
-        <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-        <meta name="apple-mobile-web-app-title" content="Fridge" />
-      </head>
+      <PageHead />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header lng={lng} />
         {children}
