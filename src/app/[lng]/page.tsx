@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Language, translate } from "../i18n";
+import { translate } from "../i18n";
+import { Language } from "../i18n/settings";
 import { Trans } from "react-i18next/TransWithoutContext";
 
 export default async function Home({ params }: { params: Promise<{ lng: Language }> }) {
