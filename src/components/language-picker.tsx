@@ -10,8 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { redirect, useParams } from "next/navigation";
-import { Language } from "@/app/i18n";
-import { languages } from "@/app/i18n/settings";
+import { languages, Language } from "@/app/i18n/settings";
 
 export function LanguagePicker() {
   const { lng } = useParams<{ lng: Language }>();
