@@ -8,8 +8,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "prettier-fix": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-    "generate-splash-screens": "npx pwa-asset-generator ./public/images/favicon.svg ./public/images/splash-screens --background #fff --splash-only --type jpeg --quality 80"
+    "generate-splash-screens": "npx pwa-asset-generator ./public/images/favicon.svg ./public/images/splash-screens --background #fff --splash-only --type jpeg --quality 80",
+    "prepare": "husky install",
+    "type-check": "tsc -b"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.2",
@@ -17,6 +25,7 @@
     "@serwist/next": "^9.0.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "eslint-plugin-unicorn": "^56.0.1",
     "i18next": "^23.16.5",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-resources-to-backend": "^1.2.1",
@@ -26,19 +35,27 @@
     "react-cookie": "^7.2.2",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-i18next": "^15.1.1",
+    "save-dev": "^0.0.1-security",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-safe-area": "^0.6.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "accept-language": "^3.0.20",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "husky": "^8.0.0",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",

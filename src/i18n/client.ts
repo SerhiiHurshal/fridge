@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import i18next, { KeyPrefix } from "i18next";
-import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next";
-import { useCookies } from "react-cookie";
-import resourcesToBackend from "i18next-resources-to-backend";
+import type { KeyPrefix } from "i18next";
+import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { getOptions, languages, cookieName, Language, Namespace } from "./settings";
+import resourcesToBackend from "i18next-resources-to-backend";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next";
+
+import { cookieName, getOptions, Language, languages, Namespace } from "./settings";
 
 const runsOnServerSide = typeof window === "undefined";
 
@@ -34,8 +36,8 @@ export function useTranslation(
   lng?: Language,
 ) {
   const [cookies, setCookie] = useCookies([cookieName]);
-  const ret = useTranslationOrg<Namespace, KeyPrefix<Namespace>>(ns, options);
-  const { i18n } = ret;
+  const returnValue = useTranslationOrg<Namespace, KeyPrefix<Namespace>>(ns, options);
+  const { i18n } = returnValue;
 
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
     i18n.changeLanguage(lng);
@@ -59,5 +61,5 @@ export function useTranslation(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lng, cookies[cookieName]]);
 
-  return ret;
+  return returnValue;
 }

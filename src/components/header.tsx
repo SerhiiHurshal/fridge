@@ -1,7 +1,8 @@
 import { translate } from "@/i18n";
+import { Language } from "@/i18n/settings";
+
 import { LanguagePicker } from "./language-picker";
 import { Button } from "./ui/button";
-import { Language } from "@/i18n/settings";
 
 export default async function Header({ lng }: { lng: Language }) {
   const { t } = await translate(lng, "global");

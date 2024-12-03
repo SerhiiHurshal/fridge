@@ -1,6 +1,8 @@
-import { createInstance, KeyPrefix } from "i18next";
+import type { KeyPrefix } from "i18next";
+import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
+
 import { defaultNS, getOptions, Language, Namespace } from "./settings";
 
 const initI18next = async (lng: Language, ns: Namespace) => {

@@ -1,9 +1,12 @@
+import "../globals.css";
+
+import { dir } from "i18next";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { dir } from "i18next";
+
 import Header from "@/components/header";
-import "../globals.css";
-import { languages, Language } from "@/i18n/settings";
+import { Language,languages } from "@/i18n/settings";
+
 import PageHead from "./page-head";
 
 const geistSans = localFont({
