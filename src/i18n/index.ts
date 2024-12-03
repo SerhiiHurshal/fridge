@@ -5,7 +5,7 @@ import { initReactI18next } from "react-i18next/initReactI18next";
 
 import { defaultNS, getOptions, Language, Namespace } from "./settings";
 
-const initI18next = async (lng: Language, ns: Namespace) => {
+const initI18next = async (lng: Language, ns?: Namespace) => {
   const i18nInstance = createInstance();
   await i18nInstance
     .use(initReactI18next)
@@ -19,18 +19,14 @@ const initI18next = async (lng: Language, ns: Namespace) => {
   return i18nInstance;
 };
 
-export async function translate(
+export async function translate<T extends Namespace = typeof defaultNS>(
   lng: Language,
-  ns: Namespace = defaultNS,
-  keyPrefix?: KeyPrefix<Namespace>,
+  ns?: T,
+  keyPrefix?: KeyPrefix<T>,
 ) {
   const i18nextInstance = await initI18next(lng, ns);
   return {
-    t: i18nextInstance.getFixedT<Namespace, KeyPrefix<Namespace> | undefined, Namespace>(
-      lng,
-      ns,
-      keyPrefix,
-    ),
+    t: i18nextInstance.getFixedT<T, KeyPrefix<T> | undefined, T>(lng, ns, keyPrefix),
     i18n: i18nextInstance,
   };
 }

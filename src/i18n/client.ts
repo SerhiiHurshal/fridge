@@ -6,9 +6,10 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import type { FallbackNs } from "react-i18next";
 import { initReactI18next, useTranslation as useTranslationOrg } from "react-i18next";
 
-import { cookieName, getOptions, Language, languages, Namespace } from "./settings";
+import { cookieName, defaultNS, getOptions, Language, languages, Namespace } from "./settings";
 
 const runsOnServerSide = typeof window === "undefined";
 
@@ -30,13 +31,13 @@ i18next
     preload: runsOnServerSide ? languages : [],
   });
 
-export function useTranslation(
-  ns?: Parameters<typeof useTranslationOrg<Namespace, KeyPrefix<Namespace>>>[0],
-  options?: Parameters<typeof useTranslationOrg<Namespace, KeyPrefix<Namespace>>>[1],
+export function useTranslation<T extends Namespace = typeof defaultNS>(
+  ns?: T,
+  options?: Parameters<typeof useTranslationOrg<T, KeyPrefix<FallbackNs<T>>>>[1],
   lng?: Language,
 ) {
   const [cookies, setCookie] = useCookies([cookieName]);
-  const returnValue = useTranslationOrg<Namespace, KeyPrefix<Namespace>>(ns, options);
+  const returnValue = useTranslationOrg<T, KeyPrefix<FallbackNs<T>>>(ns, options);
   const { i18n } = returnValue;
 
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
