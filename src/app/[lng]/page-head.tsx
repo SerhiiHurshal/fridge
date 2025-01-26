@@ -6,7 +6,7 @@ const PageHead = () => {
       <link rel="shortcut icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
       <meta name="apple-mobile-web-app-title" content="Fridge" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="mobile-web-app-capable" content="yes" />
       <link
         rel="apple-touch-startup-image"
         href="/images/splash-screens/apple-splash-2048-2732.jpg"
