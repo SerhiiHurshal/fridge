@@ -16,49 +16,48 @@ export const config = {
 
 const localeRegex = new RegExp(`^\/(${languages.join("|")})(\/|$)`);
 
-export default function middleware(request: NextRequest) {
-  const { nextUrl } = request;
+export default function middleware({ cookies, nextUrl, headers }: NextRequest) {
   //! middleware size is too big for vercel free plan = (
   // const isAuthenticated = !!request.auth;
   const isAuthenticated = !!(
-    request.cookies.get("__Secure-authjs.session-token") ??
-    request.cookies.get("authjs.session-token")
+    cookies.get("__Secure-authjs.session-token") ?? cookies.get("authjs.session-token")
   );
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname.replace(localeRegex, "/"));
 
   let lng;
-  if (request.cookies.has(cookieName))
-    lng = acceptLanguage.get(request.cookies.get(cookieName)!.value);
-  if (!lng) lng = acceptLanguage.get(request.headers.get("Accept-Language"));
+  if (cookies.has(cookieName)) lng = acceptLanguage.get(cookies.get(cookieName)!.value);
+  if (!lng) lng = acceptLanguage.get(headers.get("Accept-Language"));
   if (!lng) lng = fallbackLng;
 
-  const rewriteURL = (pathname: string) => {
-    return new URL(`/${lng}${pathname}`, request.url);
+  const appendLanguageToURL = (pathname: string) => {
+    return new URL(`/${lng}${pathname}`, nextUrl);
   };
 
+  let redirectURL: URL;
+  const lngFromPath = languages.find((lng) => nextUrl.pathname.startsWith(`/${lng}`));
+
   // Redirect if lng in path is not supported
-  if (
-    !languages.some((lng) => request.nextUrl.pathname.startsWith(`/${lng}`)) &&
-    !request.nextUrl.pathname.startsWith("/_next")
-  ) {
+  if (!lngFromPath && !nextUrl.pathname.startsWith("/_next")) {
+    redirectURL = appendLanguageToURL(nextUrl.pathname);
+
     if (isPublicRoute && isAuthenticated) {
-      return NextResponse.redirect(rewriteURL(DEFAULT_REDIRECT));
+      redirectURL = appendLanguageToURL(DEFAULT_REDIRECT);
     }
 
     if (!isAuthenticated && !isPublicRoute) {
-      return NextResponse.redirect(rewriteURL(ROOT));
+      redirectURL = appendLanguageToURL(ROOT);
     }
 
-    return NextResponse.redirect(rewriteURL(request.nextUrl.pathname));
-  }
-
-  if (request.headers.has("referer")) {
-    const refererUrl = new URL(request.headers.get("referer") as string);
-    const lngInReferer = languages.find((l) => refererUrl.pathname.startsWith(`/${l}`));
-    const response = NextResponse.next();
-    if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
+    const response = NextResponse.redirect(redirectURL);
+    response.cookies.set(cookieName, lng);
     return response;
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+
+  if (lngFromPath && lngFromPath !== lng) {
+    response.cookies.set(cookieName, lngFromPath);
+  }
+
+  return response;
 }

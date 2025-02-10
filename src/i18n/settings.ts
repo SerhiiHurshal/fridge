@@ -1,5 +1,5 @@
 export const fallbackLng = "en" as const;
-export const languages = [fallbackLng, "ua"] as const;
+export const languages = [fallbackLng, "uk"] as const;
 export const cookieName = "language";
 export const defaultNS = "global" as const;
 export const namespaces = [defaultNS, "home"] as const;
