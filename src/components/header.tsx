@@ -23,7 +23,7 @@ export default async function Header({ lng }: { lng: Language }) {
             }}
           >
             <Button variant="outline" type="submit">
-              Sign Out
+              {t("Sign Out")}
             </Button>
           </form>
         ) : (

@@ -36,19 +36,19 @@ export default function middleware(request: NextRequest) {
     return new URL(`/${lng}${pathname}`, request.url);
   };
 
-  if (isPublicRoute && isAuthenticated && !request.nextUrl.pathname.startsWith("/_next")) {
-    return NextResponse.redirect(rewriteURL(DEFAULT_REDIRECT));
-  }
-
-  if (!isAuthenticated && !isPublicRoute && !request.nextUrl.pathname.startsWith("/_next")) {
-    return NextResponse.redirect(rewriteURL(ROOT));
-  }
-
   // Redirect if lng in path is not supported
   if (
     !languages.some((lng) => request.nextUrl.pathname.startsWith(`/${lng}`)) &&
     !request.nextUrl.pathname.startsWith("/_next")
   ) {
+    if (isPublicRoute && isAuthenticated) {
+      return NextResponse.redirect(rewriteURL(DEFAULT_REDIRECT));
+    }
+
+    if (!isAuthenticated && !isPublicRoute) {
+      return NextResponse.redirect(rewriteURL(ROOT));
+    }
+
     return NextResponse.redirect(rewriteURL(request.nextUrl.pathname));
   }
 
