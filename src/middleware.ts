@@ -20,7 +20,10 @@ export default function middleware(request: NextRequest) {
   const { nextUrl } = request;
   //! middleware size is too big for vercel free plan = (
   // const isAuthenticated = !!request.auth;
-  const isAuthenticated = !!request.cookies.get("authjs.session-token");
+  const isAuthenticated = !!(
+    request.cookies.get("__Secure-authjs.session-token") ??
+    request.cookies.get("authjs.session-token")
+  );
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname.replace(localeRegex, "/"));
 
   let lng;
