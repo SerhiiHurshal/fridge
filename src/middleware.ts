@@ -1,7 +1,7 @@
 import acceptLanguage from "accept-language";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 import { cookieName, fallbackLng, languages } from "@/i18n/settings";
 
 import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "./lib/routes";
@@ -16,9 +16,11 @@ export const config = {
 
 const localeRegex = new RegExp(`^\/(${languages.join("|")})(\/|$)`);
 
-export default auth((request) => {
+export default function middleware(request: NextRequest) {
   const { nextUrl } = request;
-  const isAuthenticated = !!request.auth;
+  //! middleware size is too big for vercel free plan = (
+  // const isAuthenticated = !!request.auth;
+  const isAuthenticated = !!request.cookies.get("authjs.session-token");
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname.replace(localeRegex, "/"));
 
   let lng;
@@ -56,4 +58,4 @@ export default auth((request) => {
   }
 
   return NextResponse.next();
-});
+}
