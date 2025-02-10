@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { cookieName, fallbackLng, languages } from "@/i18n/settings";
 
+import { DEFAULT_REDIRECT, PUBLIC_ROUTES, ROOT } from "./lib/routes";
+
 acceptLanguage.languages(languages as never as string[]);
 
 export const config = {
@@ -12,19 +14,37 @@ export const config = {
   ],
 };
 
+const localeRegex = new RegExp(`^\/(${languages.join("|")})(\/|$)`);
+
 export default auth((request) => {
+  const { nextUrl } = request;
+  const isAuthenticated = !!request.auth;
+  const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname.replace(localeRegex, "/"));
+
   let lng;
   if (request.cookies.has(cookieName))
     lng = acceptLanguage.get(request.cookies.get(cookieName)!.value);
   if (!lng) lng = acceptLanguage.get(request.headers.get("Accept-Language"));
   if (!lng) lng = fallbackLng;
 
+  const rewriteURL = (pathname: string) => {
+    return new URL(`/${lng}${pathname}`, request.url);
+  };
+
+  if (isPublicRoute && isAuthenticated && !request.nextUrl.pathname.startsWith("/_next")) {
+    return NextResponse.redirect(rewriteURL(DEFAULT_REDIRECT));
+  }
+
+  if (!isAuthenticated && !isPublicRoute && !request.nextUrl.pathname.startsWith("/_next")) {
+    return NextResponse.redirect(rewriteURL(ROOT));
+  }
+
   // Redirect if lng in path is not supported
   if (
     !languages.some((lng) => request.nextUrl.pathname.startsWith(`/${lng}`)) &&
     !request.nextUrl.pathname.startsWith("/_next")
   ) {
-    return NextResponse.redirect(new URL(`/${lng}${request.nextUrl.pathname}`, request.url));
+    return NextResponse.redirect(rewriteURL(request.nextUrl.pathname));
   }
 
   if (request.headers.has("referer")) {
